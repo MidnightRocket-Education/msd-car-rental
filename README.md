@@ -15,4 +15,4 @@ in order to install the necessary packages for viewing on the web-browser.
 ````
 npx expo install react-dom @expo/webpack-config
 ````
-Now you can run ````npx expo start`````again and press w for viewing on web-browser.
+Now you can run ````npx expo start````again and press w for viewing on web-browser.
