@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "msd-car-rental": "file:",
     "typescript": "~5.3.3"
   }
 }
