@@ -1,26 +1,22 @@
 import React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Component } from 'react';
+import RootNatvigator from './RootNatvigator';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from './login';
+
 
 const App = () => {
-    // Funktion til at håndtere login
-    const handleLogin = () => {
-        Alert.alert('Log ind knap blev trykket!');
-    };
-    
+    const Stack = createStackNavigator();
 
-    return (
-        <View style={styles.container}>
-           
-        </View>
-    );
-};
+  <NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Login" 
+        component={Login} 
+        options={{ title: 'Login' }} 
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, // Dynamisk højde
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});
-
-export default App;
+}
