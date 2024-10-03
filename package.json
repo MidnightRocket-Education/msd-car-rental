@@ -1,0 +1,24 @@
+{
+  "name": "msd-car-rental",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@react-native-community/masked-view": "^0.1.11",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/stack": "^6.4.1",
+    "msd-car-rental": "file:",
+    "react-native-gesture-handler": "^2.20.0",
+    "react-native-reanimated": "^3.15.4",
+    "react-native-safe-area-context": "^4.11.0",
+    "react-native-screens": "^3.34.0",
+    "react-navigation": "^4.4.4",
+    "typescript": "~5.3.3"
+  }
+}
