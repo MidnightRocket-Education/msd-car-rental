@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Button, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BookingContext } from './BookingContext';
 import { dummyCars } from './data/dummyCars';
@@ -15,13 +15,17 @@ const CarDetailsScreen = ({ route, navigation }) => {
   const [showReturnPicker, setShowReturnPicker] = useState(false);
 
   const handleBooking = () => {
-    const bookingDetails = {
-      ...car,
-      pickupDate,
-      returnDate,
+    const booking = {
+      id: new Date().toISOString(),
+      name: car.name,
+      location: car.location,
+      price: car.price,
+      startDate: pickupDate.toISOString(),
+      endDate: returnDate.toISOString(),
     };
-    bookCar(bookingDetails);
-    navigation.navigate('Profile');
+
+    bookCar(booking);
+    navigation.navigate('Bookings');
   };
 
   return (
@@ -33,42 +37,29 @@ const CarDetailsScreen = ({ route, navigation }) => {
       <Text style={styles.carDetails}>Seats: {car.seats}</Text>
       <Text style={styles.carDetails}>Fuel: {car.fuelType}</Text>
 
-      <TouchableOpacity
-        style={styles.dateButton}
-        onPress={() => setShowPickupPicker(true)}
-      >
-        <Text style={styles.dateButtonText}>
-          {pickupDate ? `Pickup: ${pickupDate.toDateString()}` : 'Select Pickup Date'}
-        </Text>
-      </TouchableOpacity>
+      {/* Date Pickers */}
+      <Button title="Select Pickup Date" onPress={() => setShowPickupPicker(true)} />
       {showPickupPicker && (
         <DateTimePicker
           value={pickupDate}
           mode="date"
           display="default"
           onChange={(event, selectedDate) => {
-            setShowPickupPicker(false);
-            if (selectedDate) setPickupDate(selectedDate);
+            setShowPickupPicker(Platform.OS === 'ios');
+            setPickupDate(selectedDate || pickupDate);
           }}
         />
       )}
 
-      <TouchableOpacity
-        style={styles.dateButton}
-        onPress={() => setShowReturnPicker(true)}
-      >
-        <Text style={styles.dateButtonText}>
-          {returnDate ? `Return: ${returnDate.toDateString()}` : 'Select Return Date'}
-        </Text>
-      </TouchableOpacity>
+      <Button title="Select Return Date" onPress={() => setShowReturnPicker(true)} />
       {showReturnPicker && (
         <DateTimePicker
           value={returnDate}
           mode="date"
           display="default"
           onChange={(event, selectedDate) => {
-            setShowReturnPicker(false);
-            if (selectedDate) setReturnDate(selectedDate);
+            setShowReturnPicker(Platform.OS === 'ios');
+            setReturnDate(selectedDate || returnDate);
           }}
         />
       )}
@@ -99,17 +90,6 @@ const styles = StyleSheet.create({
   carDetails: {
     color: '#ccc',
     marginBottom: 5,
-  },
-  dateButton: {
-    backgroundColor: '#333',
-    padding: 10,
-    borderRadius: 5,
-    marginVertical: 10,
-  },
-  dateButtonText: {
-    color: '#6EC1E4',
-    fontSize: 16,
-    textAlign: 'center',
   },
   button: {
     backgroundColor: '#6EC1E4',
