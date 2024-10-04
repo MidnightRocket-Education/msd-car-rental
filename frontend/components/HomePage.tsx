@@ -1,33 +1,55 @@
 import { StatusBar} from "expo-status-bar";
-import {Button, StyleSheet, Text, View} from "react-native";
+import {ScrollView, Button, StyleSheet, Text, TextInput, View} from "react-native";
 import React from "react";
 
-interface ChildViewProps{
-    text: string;
-}
-
-export default function homePage(text:ChildViewProps){
+export default function homePage(){
     return (
-        <View>
-            <View style={styles.navbarbox}>
-                <Text>{text.text}</Text>
+        <View style={styles.container}>
+            <View style={styles.navbarColor}>
+                <TextInput style={styles.locationBar} placeholder="Location"></TextInput>
+                <View style={styles.twosearchBar}>
+                    <TextInput style={styles.searchBar} placeholder="Pickup"></TextInput>
+                    <TextInput style={styles.searchBar} placeholder="Pickup"></TextInput>
+                </View>
+            </View>
+            <Text style={styles.brandsTitle}>Brands</Text>
+            <View>
+                <ScrollView horizontal style={styles.brandsContainer}>
+                    {['Brand','Brand','Brand','Brand','Brand','Brand'].map(function (brand, index) {
+                        return (
+                            <View key={index} style={styles.brandCircles}>
+                                <Text>Brand</Text>
+                            </View>
+                        );
+                    })}
+                </ScrollView>
             </View>
             <View>
+                <ScrollView horizontal style={styles.brandsContainer}>
+                    {['Brand','Brand','Brand','Brand','Brand','Brand'].map(function (brand, index) {
+                        return (
+                            <View key={index} style={styles.brandnameBoxes}>
+                                <Text>Brand</Text>
+                            </View>
+                        );
+                    })}
+                </ScrollView>
+            </View>
+            <Text style={styles.brandsTitle}>Popular Cars</Text>
+            <View style={styles.largeimageFrames}>
                 <View>
-                    <label>
-                        X: <input style={styles.address_inputfield} name="myInput"/>
-                    </label>
+                    <View style={styles.carimageBig}>X</View>
+                    <View style={styles.twosearchBar}>
+                        <Text style={styles.carrentalInfo}>Car Name</Text>
+                        <Text style={styles.carrentalInfo}>1000 KR,- / hrs</Text>
+                    </View>
                 </View>
-                <View style={styles.pickupbox}>
-                    <label>
-                    X: <input name="myInput"/>
-                    </label>
-                    <label>
-                        X: <input name="myInput"/>
-                    </label>
-                </View>
-                <View style={styles.searchbutton}>
-                    <Button title={'Search'}></Button>
+                <View>
+                    <View style={styles.carimageBig}>X</View>
+                    <View>
+                        <Text style={styles.carrentalInfo}>Car Name</Text>
+                        <Text style={styles.carrentalInfo}>1000 KR,- / hrs</Text>
+                    </View>
                 </View>
             </View>
             <StatusBar style="auto"/>
@@ -36,20 +58,78 @@ export default function homePage(text:ChildViewProps){
 }
 
 const styles = StyleSheet.create({
-    navbarbox: {
-        backgroundColor: '#330099',
-        color: 'white',
-        alignItems: 'center',
-        width: '100%',
-        height: 50,
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: 'white'
     },
-    address_inputfield : {
-        width: 352,
+    navbarColor: {
+        backgroundColor: '#0096ff',
     },
-    pickupbox : {
+    locationBar: {
+        padding: 8,
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 16,
+        marginTop: 16,
+        marginLeft: 8,
+        marginRight: 8,
+        backgroundColor: 'white',
+    },
+    twosearchBar: {
         flexDirection: 'row',
     },
-    searchbutton: {
-        borderRadius: 5,
+    searchBar: {
+        padding: 8,
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 16,
+        marginLeft: 8,
+        marginRight: 8,
+        backgroundColor: 'white',
+    },
+    brandsTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 16,
+    },
+    brandsContainer: {
+        flexDirection: 'row',
+        marginBottom: 5,
+    },
+    brandCircles: {
+        padding: 8,
+        backgroundColor: 'grey',
+        borderRadius: 16,
+        height: 50,
+        marginRight: 8,
+        marginLeft: 4,
+    },
+    brandnameBoxes: {
+        padding: 8,
+        backgroundColor: 'white',
+        marginRight: 8,
+        marginLeft: 4,
+    },
+    largeimageFrames: {
+        flexDirection: 'column',
+    },
+    carimageBig: {
+        marginTop: 10,
+        backgroundColor: 'grey',
+        height: 100,
+        borderRadius: 16,
+    },
+    carrentalInfo: {
+        padding: 8,
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 16,
+        marginLeft: 8,
+        marginRight: 8,
+        backgroundColor: 'white',
     }
 })
