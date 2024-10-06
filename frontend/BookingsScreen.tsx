@@ -1,40 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { BookingContext } from './BookingContext';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 
 const BookingsScreen = ({ navigation }) => {
-  const { bookings, loggedIn } = useContext(BookingContext);
+  const { bookings, loggedIn, setRating } = useContext(BookingContext);
 
-  const dummyOldBookings = [
-    {
-      id: '1',
-      name: 'Toyota Corolla',
-      location: 'New York',
-      startDate: '2023-09-25T10:00:00',
-      endDate: '2023-09-27T14:00:00',
-      rating: 3,
-    },
-    {
-      id: '2',
-      name: 'Honda Civic',
-      location: 'Los Angeles',
-      startDate: '2023-08-15T09:00:00',
-      endDate: '2023-08-16T16:00:00',
-      rating: 4, 
-    },
-  ];
+  const [oldBookings, setOldBookings] = useState([]);
+  const [currentBookings, setCurrentBookings] = useState([]);
 
-  const currentBookings = bookings.filter(booking => new Date(booking.endDate) >= new Date());
-  const [oldBookings, setOldBookings] = useState(dummyOldBookings);
+  useEffect(() => {
+    const now = new Date();
 
-  const setRating = (bookingId, newRating) => {
-    const updatedBookings = oldBookings.map(booking =>
-      booking.id === bookingId ? { ...booking, rating: newRating } : booking
-    );
-    setOldBookings(updatedBookings);
-  };
+    const current = bookings.filter(booking => new Date(booking.endDate) > now);
+    const old = bookings.filter(booking => new Date(booking.endDate) <= now);
+
+    setCurrentBookings(current);
+    setOldBookings(old);
+  }, [bookings]);
 
   if (!loggedIn) {
     return (
@@ -56,49 +40,65 @@ const BookingsScreen = ({ navigation }) => {
     );
   }
 
+  if (currentBookings.length === 0 && oldBookings.length === 0) {
+    return (
+      <View style={styles.centeredContainer}>
+        <Text style={styles.subtext}>No bookings available.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Your Bookings</Text>
 
-      <Text style={styles.sectionHeader}>Current:</Text>
-      <FlatList
-        data={currentBookings}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.bookingItem}>
-            <Text style={styles.location}>{item.name}</Text>
-            <Text style={styles.location}>{item.location}</Text>
-            <Text style={styles.date}>From: {format(new Date(item.startDate), 'dd MMM yyyy, hh:mm a')}</Text>
-            <Text style={styles.date}>To: {format(new Date(item.endDate), 'dd MMM yyyy, hh:mm a')}</Text>
-          </View>
-        )}
-      />
+      {currentBookings.length > 0 && (
+        <>
+          <Text style={styles.sectionHeader}>Current:</Text>
+          <FlatList
+            data={currentBookings}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.bookingItem}>
+                <Text style={styles.location}>{item.name}</Text>
+                <Text style={styles.location}>{item.location}</Text>
+                <Text style={styles.date}>From: {format(new Date(item.startDate), 'dd MMM yyyy, hh:mm a')}</Text>
+                <Text style={styles.date}>To: {format(new Date(item.endDate), 'dd MMM yyyy, hh:mm a')}</Text>
+              </View>
+            )}
+          />
+        </>
+      )}
 
-      <Text style={styles.sectionHeader}>Old:</Text>
-      <FlatList
-        data={oldBookings}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.bookingItem}>
-            <Text style={styles.location}>{item.name}</Text>
-            <Text style={styles.location}>{item.location}</Text>
-            <Text style={styles.date}>From: {format(new Date(item.startDate), 'dd MMM yyyy, hh:mm a')}</Text>
-            <Text style={styles.date}>To: {format(new Date(item.endDate), 'dd MMM yyyy, hh:mm a')}</Text>
+      {oldBookings.length > 0 && (
+        <>
+          <Text style={styles.sectionHeader}>Old:</Text>
+          <FlatList
+            data={oldBookings}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.bookingItem}>
+                <Text style={styles.location}>{item.name}</Text>
+                <Text style={styles.location}>{item.location}</Text>
+                <Text style={styles.date}>From: {format(new Date(item.startDate), 'dd MMM yyyy, hh:mm a')}</Text>
+                <Text style={styles.date}>To: {format(new Date(item.endDate), 'dd MMM yyyy, hh:mm a')}</Text>
 
-            <View style={styles.ratingContainer}>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <TouchableOpacity key={index} onPress={() => setRating(item.id, index + 1)}>
-                  <Ionicons
-                    name={index < item.rating ? 'star' : 'star-outline'}
-                    size={20}
-                    color="#FFD700"
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        )}
-      />
+                <View style={styles.ratingContainer}>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <TouchableOpacity key={index} onPress={() => setRating(item.id, index + 1)}>
+                      <Ionicons
+                        name={index < item.rating ? 'star' : 'star-outline'}
+                        size={20}
+                        color="#FFD700"
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )}
+          />
+        </>
+      )}
     </View>
   );
 };

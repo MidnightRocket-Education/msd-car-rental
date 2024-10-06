@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import { dummyCars } from './data/dummyCars';
+import { mockFetchCars } from './mockApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState('');
   const [fuelType, setFuelType] = useState('All');
   const [seats, setSeats] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 100]);
-  const [filteredCars, setFilteredCars] = useState(dummyCars);
+  const [filteredCars, setFilteredCars] = useState([]);
   const [showFilters, setShowFilters] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const persistedData = await AsyncStorage.getItem('cars');
+        if (persistedData) {
+          setFilteredCars(JSON.parse(persistedData));
+        } else {
+          const data = await mockFetchCars();
+          setFilteredCars(data);
+          await AsyncStorage.setItem('cars', JSON.stringify(data));
+        }
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const applyFilters = (searchTerm, fuel, seatCount, priceRange) => {
     let filteredData = dummyCars;
