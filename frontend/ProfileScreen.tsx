@@ -1,30 +1,26 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { BookingContext } from './BookingContext';
 
 const ProfileScreen = ({ navigation }) => {
-  const { bookings, loggedIn, logout } = useContext(BookingContext); 
+  const { loggedIn, logout } = useContext(BookingContext); 
 
   return (
     <View style={styles.container}>
       {loggedIn ? (
         <View>
-          <Text style={styles.header}>My Bookings</Text>
-          {bookings.length === 0 ? (
-            <Text style={styles.noBookings}>You have no bookings yet</Text>
-          ) : (
-            <FlatList
-              data={bookings}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View style={styles.bookingItem}>
-                  <Text style={styles.carName}>{item.name}</Text>
-                  <Text style={styles.carDetails}>Location: {item.location}</Text>
-                  <Text style={styles.carDetails}>Price: ${item.price}/hr</Text>
-                </View>
-              )}
-            />
-          )}
+          <View style={styles.profileHeader}>
+            <Text style={styles.profileName}>Vivek Misra</Text>
+            <Text style={styles.profileEmail}>vimis22@student.sdu.dk</Text>
+          </View>
+          <View style={styles.profileDetails}>
+            <Text style={styles.detailLabel}>First Name:</Text>
+            <Text style={styles.detailValue}>Vivek</Text>
+            <Text style={styles.detailLabel}>Last Name:</Text>
+            <Text style={styles.detailValue}>Misra</Text>
+            <Text style={styles.detailLabel}>Phone Number:</Text>
+            <Text style={styles.detailValue}>+45-xxxxxxxx</Text>
+          </View>
           <TouchableOpacity style={styles.buttonSecondary} onPress={logout}>
             <Text style={styles.buttonText}>Log out</Text>
           </TouchableOpacity>
@@ -56,32 +52,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     padding: 20,
   },
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  profileHeader: {
     alignItems: 'center',
-  },
-  header: {
-    fontSize: 24,
-    color: '#fff',
     marginBottom: 20,
   },
-  noBookings: {
+  profileName: {
+    fontSize: 22,
+    color: '#fff',
+  },
+  profileEmail: {
+    fontSize: 16,
     color: '#ccc',
-    textAlign: 'center',
   },
-  bookingItem: {
-    backgroundColor: '#333',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
+  profileDetails: {
+    marginTop: 10,
   },
-  carName: {
+  detailLabel: {
+    color: '#6EC1E4',
+    fontSize: 16,
+    marginTop: 10,
+  },
+  detailValue: {
     color: '#fff',
     fontSize: 18,
-  },
-  carDetails: {
-    color: '#ccc',
   },
   button: {
     backgroundColor: '#6EC1E4',
@@ -106,6 +99,11 @@ const styles = StyleSheet.create({
   subtext: {
     color: '#fff',
     marginBottom: 30,
+  },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
