@@ -1,4 +1,3 @@
-// LoginScreen.js
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { BookingContext } from './BookingContext';
